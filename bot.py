@@ -1,5 +1,6 @@
 import sys
 import json
+from html.parser import HTMLParser
 
 import requests
 from slacker import Slacker
@@ -43,27 +44,32 @@ class ChatHandler:
 
 
 class Translator:
-    base_url = 'https://translation.googleapis.com/language/translate/v2'
+    _base_url = 'https://translation.googleapis.com/language/translate/v2'
+    _html_parser = HTMLParser()
 
     def __init__(self, api_key):
-        self.api_key = api_key
+        self._api_key = api_key
 
     def translate(self, msg, target='en'):
         params = {
-            'key': self.api_key,
+            'key': self._api_key,
             'target': target,
             'q': msg,
         }
-        resp = requests.get(self.base_url, params=params).json()
-        return resp['data']['translations'][0]['translatedText']
+        resp = requests.get(self._base_url, params=params).json()
+        translated_msg = resp['data']['translations'][0]['translatedText']
+        return self._unescape(translated_msg)
 
     def availables(self):
         params = {
-            'key': self.api_key,
+            'key': self._api_key,
         }
-        resp = requests.get(self.base_url + '/languages', params=params).json()
+        resp = requests.get(self._base_url + '/languages', params=params).json()
         langs = [lang['language'] for lang in resp['data']['languages']]
         return ', '.join(langs)
+
+    def _unescape(self, msg):
+        return self._html_parser.unescape(msg)
 
 
 def run(slack_token, google_token):
