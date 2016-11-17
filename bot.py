@@ -19,8 +19,11 @@ class ChatHandler:
     def loop(self):
         while True:
             ch, msg = self._read()
-            translated_msg = self._translator.translate(msg)
-            self._send(ch, translated_msg)
+            if msg == '/lang':
+                msg = self._translator.availables()
+            else:
+                msg = self._translator.translate(msg)
+            self._send(ch, msg)
 
     def _read(self):
         ch, msg = None, None
@@ -70,7 +73,8 @@ class Translator:
         }
         resp = requests.get(self._base_url + '/languages', params=params).json()
         langs = [lang['language'] for lang in resp['data']['languages']]
-        return ', '.join(langs)
+        info = '사용 가능한 언어 코드는 다음과 같아요 ^ㅇ^\n\n'
+        return info + ', '.join(langs)
 
     def _unescape(self, msg):
         return self._html_parser.unescape(msg)
