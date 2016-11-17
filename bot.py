@@ -18,33 +18,33 @@ class ChatHandler:
 
     def loop(self):
         while True:
-            ch, msg = self._read()
+            ch, msg, target = self._read()
             if msg == '/lang':
                 msg = self._translator.availables()
             else:
-                msg = self._translator.translate(msg)
+                msg = self._translator.translate(msg, target=target)
             self._send(ch, msg)
 
     def _read(self):
-        ch, msg = None, None
         while True:
             event = json.loads(self._socket.recv())
-            print('@@@@@ {}'.format(event))
             if 'bot_id' in event:
                 continue
-            ch, msg = self._parse(event)
+            ch, msg, target = self._parse(event)
             if not ch or not msg:
                 continue
             break
-        return ch, msg
+        return ch, msg, target
 
     def _parse(self, event):
-        if event['type'] == 'message' and\
-                self._gtbot_id in event['text']:
-            text = event['text'].replace(self._gtbot_id, '').strip()
-            return event['channel'], text
-        else:
-            return None, None
+        if event['type'] != 'message' or self._gtbot_id not in event['text']:
+            return None, None, None
+        text = event['text'].replace(self._gtbot_id, '').strip()
+        target = self._default_target
+        if text.startswith('/target'):
+            text = text.replace('/target', '').strip().split()
+            target, text = text[0], ' '.join(text[1:])
+        return event['channel'], text, target
 
     def _send(self, ch, msg):
         self._chat.post_message(ch, msg, as_user=True)
