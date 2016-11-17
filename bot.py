@@ -13,29 +13,33 @@ class ChatHandler:
         resp = slacker.rtm.start()
         self._socket = create_connection(resp.body['url'])
         self._translator = translator
+        bot_user_id = slacker.users.get_user_id('gtbot')
+        self._gtbot_id = '<@{}>'.format(bot_user_id)
 
     def loop(self):
         while True:
             ch, msg = self._read()
-            if not ch or not msg:
-                continue
             translated_msg = self._translator.translate(msg)
             self._send(ch, translated_msg)
 
     def _read(self):
-        parsed = None
+        ch, msg = None, None
         while True:
             event = json.loads(self._socket.recv())
-            print('@@@@@@@@@@@@@@@@ {}'.format(event))
+            print('@@@@@ {}'.format(event))
             if 'bot_id' in event:
                 continue
-            parsed = self._parse(event)
+            ch, msg = self._parse(event)
+            if not ch or not msg:
+                continue
             break
-        return parsed
+        return ch, msg
 
     def _parse(self, event):
-        if event['type'] == 'message':
-            return event['channel'], event['text']
+        if event['type'] == 'message' and\
+                self._gtbot_id in event['text']:
+            text = event['text'].replace(self._gtbot_id, '').strip()
+            return event['channel'], text
         else:
             return None, None
 
