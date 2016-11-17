@@ -15,12 +15,15 @@ class ChatHandler:
         self._translator = translator
         bot_user_id = slacker.users.get_user_id('gtbot')
         self._gtbot_id = '<@{}>'.format(bot_user_id)
+        self._default_target = 'en'
 
     def loop(self):
         while True:
             ch, msg, target = self._read()
             if msg == '/lang':
                 msg = self._translator.availables()
+            elif msg == '/setdefault':
+                msg = self._set_default(target)
             else:
                 msg = self._translator.translate(msg, target=target)
             self._send(ch, msg)
@@ -41,13 +44,21 @@ class ChatHandler:
             return None, None, None
         text = event['text'].replace(self._gtbot_id, '').strip()
         target = self._default_target
+
         if text.startswith('/target'):
             text = text.replace('/target', '').strip().split()
             target, text = text[0], ' '.join(text[1:])
+        if text.startswith('/setdefault'):
+            text, target = text.split()
         return event['channel'], text, target
 
     def _send(self, ch, msg):
         self._chat.post_message(ch, msg, as_user=True)
+
+    def _set_default(self, target):
+        self._default_target = target
+        self._translator.set_default_target(target)
+        return '기본 번역 언어가 {}로 설정 되었습니다 ^ㅇ^'.format(target)
 
 
 class Translator:
@@ -56,8 +67,11 @@ class Translator:
 
     def __init__(self, api_key):
         self._api_key = api_key
+        self._default_target = 'en'
 
-    def translate(self, msg, target='en'):
+    def translate(self, msg, target=None):
+        if not target:
+            target = self._default_target
         params = {
             'key': self._api_key,
             'target': target,
@@ -75,6 +89,9 @@ class Translator:
         langs = [lang['language'] for lang in resp['data']['languages']]
         info = '사용 가능한 언어 코드는 다음과 같아요 ^ㅇ^\n\n'
         return info + ', '.join(langs)
+
+    def set_default_target(self, target):
+        self._default_target = target
 
     def _unescape(self, msg):
         return self._html_parser.unescape(msg)
