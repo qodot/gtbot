@@ -7,7 +7,7 @@ from slacker import Slacker
 from websocket import create_connection
 
 
-class ChatHandler:
+class Bot:
     def __init__(self, slacker, translator):
         self._chat = slacker.chat
         resp = slacker.rtm.start()
@@ -98,8 +98,7 @@ class Translator:
 
 
 def run(slack_token, google_token):
-    slacker = Slacker(slack_token)
-    chat_handler = ChatHandler(slacker, Translator(google_token))
+    chat_handler = Bot(Slacker(slack_token), Translator(google_token))
 
     print('Start event loop...')
     chat_handler.loop()
