@@ -58,7 +58,7 @@ class Bot:
     def _set_default(self, target):
         self._default_target = target
         self._translator.set_default_target(target)
-        return '기본 번역 언어가 {}로 설정 되었습니다 ^ㅇ^'.format(target)
+        return '기본 번역 언어가 {}(으)로 설정 되었습니다 ^ㅇ^'.format(target)
 
 
 class Translator:
