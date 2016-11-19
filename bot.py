@@ -9,7 +9,7 @@ from websocket import create_connection
 
 class Bot:
     def __init__(self, slacker, translator):
-        self._chat = slacker.chat
+        self._slacker = slacker
         resp = slacker.rtm.start()
         self._socket = create_connection(resp.body['url'])
         self._translator = translator
@@ -55,7 +55,7 @@ class Bot:
         return event['channel'], text, target
 
     def _send(self, ch, msg):
-        self._chat.post_message(ch, msg, as_user=True)
+        self._slacker.chat.post_message(ch, msg, as_user=True)
 
     def _set_default(self, target):
         self._default_target = target
