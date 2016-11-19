@@ -1,4 +1,4 @@
-import sys
+import os
 import json
 from html.parser import HTMLParser
 
@@ -97,14 +97,12 @@ class Translator:
         return self._html_parser.unescape(msg)
 
 
-def run(slack_token, google_token):
+def run():
+    slack_token = os.environ.get('GTBOT_SLACK_TOKEN')
+    google_token = os.environ.get('GTBOT_GOOGLE_TOKEN')
     chat_handler = Bot(Slacker(slack_token), Translator(google_token))
-
-    print('Start event loop...')
     chat_handler.loop()
 
 
 if __name__ == '__main__':
-    slack_token = sys.argv[1]
-    google_token = sys.argv[2]
-    run(slack_token, google_token)
+    run()
