@@ -1,4 +1,5 @@
 .env.fish
 *.swp
+.cache
 
 *.pyc
