@@ -6,8 +6,8 @@ from bot import Bot
 from bot import Translator
 
 
-# @pytest.mark.usefixtures('run_bot')
-# @pytest.mark.usefixtures('join_test_channel')
+@pytest.mark.usefixtures('run_bot')
+@pytest.mark.usefixtures('join_test_channel')
 class TestBot:
     def test_init(self, bot):
         assert isinstance(bot, Bot)

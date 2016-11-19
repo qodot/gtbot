@@ -1,4 +1,5 @@
 import os
+from _thread import start_new_thread
 
 import pytest
 import slacker
@@ -13,7 +14,7 @@ def bot():
 
 @pytest.fixture(scope='session')
 def run_bot(bot):
-    bot.run_loop()
+    start_new_thread(bot.run_loop, tuple())
 
 
 @pytest.fixture(scope='session')
