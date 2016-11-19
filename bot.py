@@ -16,8 +16,10 @@ class Bot:
         bot_user_id = slacker.users.get_user_id('gtbot')
         self._gtbot_id = '<@{}>'.format(bot_user_id)
         self._default_target = 'en'
+        print('Successful initializing...')
 
-    def loop(self):
+    def run_loop(self):
+        print('Start event loop...')
         while True:
             ch, msg, target = self._read()
             if msg == '/lang':
@@ -97,11 +99,15 @@ class Translator:
         return self._html_parser.unescape(msg)
 
 
-def run():
+def create_bot():
     slack_token = os.environ.get('GTBOT_SLACK_TOKEN')
     google_token = os.environ.get('GTBOT_GOOGLE_TOKEN')
-    chat_handler = Bot(Slacker(slack_token), Translator(google_token))
-    chat_handler.loop()
+    return Bot(Slacker(slack_token), Translator(google_token))
+
+
+def run():
+    bot = create_bot()
+    bot.run_loop()
 
 
 if __name__ == '__main__':
