@@ -33,7 +33,10 @@ class Bot:
     def _read(self):
         while True:
             event = json.loads(self._socket.recv())
-            if 'bot_id' in event:
+            print('************')
+            print('***', event)
+            print('************')
+            if 'bot_id' in event and event.get('username') != 'testuser':
                 continue
             ch, msg, target = self._parse(event)
             if not ch or not msg:
