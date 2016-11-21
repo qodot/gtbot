@@ -53,25 +53,22 @@ def run_bot_process(bot_id, testuser_slacker):
 
 
 @pytest.fixture(scope='session')
-def run_testuser_msg_loop(websocket, testuser_msgs):
+def run_testuser_msg_loop(websocket, bot_reply, bot_id):
     def loop(websocket):
         while True:
             while True:
                 event = json.loads(websocket.recv())
-                # some event has no username
-                if event['type'] == 'message' and\
-                        event.get('username') == 'testuser':
-                    print('##########')
-                    print('###', event)
-                    print('##########')
-                    testuser_msgs.append(event['text'])
+                # some event has no user
+                user_id = '<@{}>'.format(event.get('user'))
+                if event['type'] == 'message' and user_id == bot_id:
+                    bot_reply.append(event['text'])
     start_new_thread(loop, (websocket,))
 
 
 @pytest.fixture(scope='session')
-def testuser_msgs():
-    msgs = []
-    return msgs
+def bot_reply():
+    reply = []
+    return reply
 
 
 @pytest.fixture(scope='session')

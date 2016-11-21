@@ -16,7 +16,7 @@ class Bot:
         bot_user_id = slacker.users.get_user_id('gtbot')
         self._gtbot_id = '<@{}>'.format(bot_user_id)
         self._default_target = 'en'
-        print('Successful initializing...')
+        print('Successful bot initializing...')
 
     def run_loop(self):
         print('Start event loop...')
@@ -33,9 +33,6 @@ class Bot:
     def _read(self):
         while True:
             event = json.loads(self._socket.recv())
-            print('************')
-            print('***', event)
-            print('************')
             if 'bot_id' in event and event.get('username') != 'testuser':
                 continue
             ch, msg, target = self._parse(event)
