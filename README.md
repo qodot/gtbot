@@ -1,8 +1,12 @@
 # gtbot
 
-## Overview
+[![Build Status](https://travis-ci.org/qodot/gtbot.svg?branch=master)](https://travis-ci.org/qodot/gtbot)
 
-- 구글 번역 API를 이용한 슬랙 번역 봇입니다. 슬랙 채널에 봇을 초대해 놓고 `@gtbot`으로 말을 걸면 번역을 할 수 있습니다. 최초 기본 번역 언어는 영어(en)입니다.
+구글 번역 API를 이용한 슬랙 번역 봇입니다.
+
+## Functions
+
+- 슬랙 채널에 봇을 초대해 놓고 `@gtbot`으로 말을 걸면 번역을 할 수 있습니다. 최초 기본 번역 언어는 영어(en)입니다.
 
 ![overview](/readmeimages/overview.png)
 
@@ -21,7 +25,7 @@
 <br>
 ## Install
 
-### Clone source codes
+### Clone repository
 
 ```sh
 git clone https://github.com/qodot/gtbot.git
@@ -56,7 +60,7 @@ export GTBOT_GOOGLE_TOKEN=<your_token>
 
 ### Get a slack test user API token
 
-**이 항목은 이 애플리케이션의 테스트를 실행하기 위해 필요한 항목으로, 테스트를 실행하지 않을 분은 건너뛰어도 괜찮습니다.**
+__* 이 항목은 이 애플리케이션의 테스트를 실행하기 위해 필요한 항목으로, 테스트를 실행하지 않을 분은 건너뛰어도 괜찮습니다.__
 
 [슬랙 테스트 토큰 발급 페이지](https://api.slack.com/docs/oauth-test-tokens)에 가서 봇 Integration을 했던 팀의 테스트 토큰을 발급 받고, 환경변수에 다음과 같이 추가합니다.
 
