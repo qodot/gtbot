@@ -4,7 +4,7 @@
 
 구글 번역 API를 이용한 슬랙 번역 봇입니다.
 
-## Functions
+## Features
 
 - 슬랙 채널에 봇을 초대해 놓고 `@gtbot`으로 말을 걸면 번역을 할 수 있습니다. 최초 기본 번역 언어는 영어(en)입니다.
 
@@ -22,7 +22,6 @@
 
 ![setdefault](/readmeimages/setdefault.png)
 
-<br>
 ## Install
 
 ### Clone repository
@@ -68,7 +67,6 @@ __* 이 항목은 이 애플리케이션의 테스트를 실행하기 위해 필
 export GTBOT_SLACK_TOKEN_TEST=<your_token>
 ```
 
-<br>
 ## Run
 
 다음과 같이 실행합니다.
@@ -89,17 +87,16 @@ pytest
 pytest --cov
 ```
 
-<br>
 ## Dependencies
 
-### For Application
+### Application
 
 - python 3.5
 - slacker [https://github.com/os/slacker](https://github.com/os/slacker)
 - requests [http://docs.python-requests.org/en/master](http://docs.python-requests.org/en/master)
 - websocket-client [https://github.com/liris/websocket-client](https://github.com/liris/websocket-client)
 
-### For test
+### test
 
 - pytest [http://doc.pytest.org/en/latest](http://doc.pytest.org/en/latest)
 - coverage [https://coverage.readthedocs.io/en/coverage-4.2](https://coverage.readthedocs.io/en/coverage-4.2)
