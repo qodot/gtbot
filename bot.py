@@ -39,11 +39,15 @@ class Bot:
             if not ch or not msg:
                 continue
             break
+
         return ch, msg, target
 
     def _parse(self, event):
-        if event['type'] != 'message' or self._gtbot_id not in event['text']:
+        if event['type'] != 'message' or\
+                not event.get('text') or\
+                self._gtbot_id not in event.get('text'):
             return None, None, None
+
         text = event['text'].replace(self._gtbot_id, '').strip()
         target = self._default_target
 
@@ -52,6 +56,7 @@ class Bot:
             target, text = text[0], ' '.join(text[1:])
         if text.startswith('/setdefault'):
             text, target = text.split()
+
         return event['channel'], text, target
 
     def _send(self, ch, msg):
