@@ -1,0 +1,12 @@
+version: '3.0'
+
+services:
+  gtbot:
+    image: gtbot
+    container_name: gtbot
+    environment:
+      - GTBOT_GOOGLE_TOKEN
+      - GTBOT_SLACK_TOKEN
+      - GTBOT_SLACK_TOKEN_TEST
+    volumes:
+      - ./:/app
